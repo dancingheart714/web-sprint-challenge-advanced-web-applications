@@ -61,7 +61,7 @@ const Login = () => {
         <button type="submit">Log in</button>
       </form>
       <p data-testid="errorMessage" className="error">
-        {error}"Username or Password not valid"
+        {error}
       </p>
     </>
   );
