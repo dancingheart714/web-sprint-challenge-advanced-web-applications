@@ -1,72 +1,83 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
+import { axiosWithAuth } from '../helpers/axiosWithAuth';
 import { useHistory } from 'react-router-dom';
 
-const initialState = {
-  username: '',
-  password: '',
-};
-
-const Login = () => {
-  // make a post request to retrieve a token from the api
-  // when you have handled the token, navigate to the BubblePage route
-
-  const [formData, setFormData] = useState(initialState);
-  const [error, setError] = useState('');
-
-  const history = useHistory();
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+const Login = (props) => {
+  const initialLoginData = {
+    username: '',
+    password: '',
   };
 
-  const login = (e) => {
-    e.preventDefault();
+  // make a post request to retrieve a token from the api
+  // when you have handled the token, navigate to the BubblePage route
+  const initialError = '';
 
-    axios
-      .post('http://localhost:5000/api/login', formData)
+  const [loginData, setLoginData] = useState(initialLoginData);
+  const [loginError, setLoginError] = useState(initialError);
+
+  const { push } = useHistory();
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    axiosWithAuth()
+      .post('http://localhost:5000/api/login', loginData)
       .then((res) => {
         console.log(res);
-        localStorage.setItem('token', res.data.payload);
-        history.push('/bubblepage');
+        const token = res.data.payload;
+        localStorage.setItem('token', token);
+        setLoginData(initialLoginData);
+        props.setLoggedIn(true);
+        push('/bubbles');
       })
-      .catch((err) => {
-        setError(`Error ${err.response.status}: ${err.response.data.error}`);
-      });
+      .catch((error) =>
+        setLoginError('Please enter a valid username and password')
+      );
+  };
+
+  const handleInput = (event) => {
+    setLoginData({
+      ...loginData,
+      [event.target.name]: event.target.value,
+    });
   };
 
   return (
     <>
       <h1>Welcome to the Bubble App!</h1>
-      <form onSubmit={login}>
+      <form onSubmit={handleSubmit}>
         <h2>Login</h2>
-        <input
-          type="text"
-          name="username"
-          value={formData.username}
-          onChange={handleChange}
-          placeholder="Username"
-        />
-        <input
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          placeholder="Password"
-        />
+        <label>
+          Username
+          <input
+            type="text"
+            name="username"
+            data-testid="username"
+            value={loginData.username}
+            onChange={handleInput}
+            placeholder="Username"
+          />
+        </label>
 
-        <button type="submit">Log in</button>
+        <label>
+          Password
+          <input
+            type="password"
+            name="password"
+            data-testid="password"
+            value={loginData.password}
+            onChange={handleInput}
+            placeholder="Password"
+          />
+        </label>
+        <button>Log in</button>
       </form>
       <p data-testid="errorMessage" className="error">
-        {error}
+        {loginError}
       </p>
     </>
   );
 };
-
 export default Login;
 
 //Task List:

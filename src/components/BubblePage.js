@@ -1,28 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import Bubbles from './Bubbles';
 import ColorList from './ColorList';
-import fetchColors from '../helpers/fetchColors';
+import { axiosWithAuth } from '../helpers/axiosWithAuth';
 
 const BubblePage = () => {
   const [colorList, setColorList] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    setIsLoading(true);
-    fetchColors()
-      .then((data) => {
-        setColorList(data);
-        setIsLoading(false);
+    axiosWithAuth()
+      .get('/api/colors')
+      .then((res) => {
+        console.log(res.data);
+        setColorList(res.data);
       })
-      .catch((err) => {
-        console.log('fetchColorsError', err);
-      });
+      .catch((error) => console.log(error));
   }, []);
 
   return (
     <div>
-      <p>Loading...</p>
-
       <ColorList colors={colorList} updateColors={setColorList} />
       <Bubbles colors={colorList} />
     </div>
