@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
-import Login from "./components/Login";
-import "./styles.scss";
+import Login from './components/Login';
+import './styles.scss';
 
 function App() {
   return (
@@ -10,8 +10,10 @@ function App() {
       <div className="App">
         <header>
           Color Picker Sprint Challenge
-          <a data-testid="logoutButton" href="#">logout</a>
-        </header> 
+          <a data-testid="logoutButton" href="#">
+            logout
+          </a>
+        </header>
 
         <Route exact path="/" component={Login} />
       </div>

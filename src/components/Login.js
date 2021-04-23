@@ -1,25 +1,49 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 
 const Login = () => {
   // make a post request to retrieve a token from the api
   // when you have handled the token, navigate to the BubblePage route
 
-  useEffect(()=>{
+  useEffect(() => {
     // make a post request to retrieve a token from the api
     // when you have handled the token, navigate to the BubblePage route
   });
-  
-  const error = "";
+
+  const error = '';
   //replace with error state
 
   return (
     <div>
       <h1>Welcome to the Bubble App!</h1>
       <div data-testid="loginForm" className="login-form">
-        <h2>Build login form here</h2>
+        <form onSubmit={login}>
+          <h2>Login</h2>
+          <label>
+            User Name:
+            <input
+              type="text"
+              name="username"
+              value={credentials.username}
+              onChange={handleChange}
+            />
+          </label>
+
+          <label>
+            Password:
+            <input
+              type="password"
+              name="password"
+              value={credentials.password}
+              onChange={handleChange}
+            />
+          </label>
+          <button type="submit">Log in</button>
+        </form>
       </div>
 
-      <p data-testid="errorMessage" className="error">{error}</p>
+      <p data-testid="errorMessage" className="error">
+        {error}
+      </p>
     </div>
   );
 };
